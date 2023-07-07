@@ -4,9 +4,10 @@ import { Filter } from './Filter/Filter';
 import { ContactList } from './ContactList/ContactList';
 import css from './ContactForm/ContactForm.module.css';
 import {
+  fetchContacts,
   addContact,
   deleteContact,
-} from '../redux/slices/contactsSlice';
+} from '../redux/operations/operations';
 import { setFilter } from '../redux/slices/filterSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -20,11 +21,8 @@ export const App = () => {
   const { filter } = useSelector(selectFilters);
 
   useEffect(() => {
-    localStorage.setItem(
-      'contactList',
-      JSON.stringify(contacts)
-    );
-  }, [contacts]);
+    dispatch(fetchContacts());
+  }, []);
 
   const handleChange = e => {
     const { value } = e.target;
@@ -35,31 +33,18 @@ export const App = () => {
     );
   };
 
-  const handleSubmit = e => {
-    const name = e.name;
-    const number = e.number;
-    dispatch(
-      addContact({
-        name,
-        number,
-      })
-    );
-  };
-
   const handleDelete = id => {
-    dispatch(
-      deleteContact({
-        id,
-      })
-    );
+    dispatch(deleteContact(id));
   };
 
   const getFilteredContacts = () => {
-    const filteredContactList = contacts.filter(contact => {
-      return contact.name
-        .toLowerCase()
-        .includes(filter.toLowerCase());
-    });
+    const filteredContactList =
+      contacts &&
+      contacts.filter(contact => {
+        return contact.name
+          .toLowerCase()
+          .includes(filter.toLowerCase());
+      });
     return filteredContactList;
   };
 
@@ -78,7 +63,7 @@ export const App = () => {
         paddingBottom: 30,
       }}>
       <h1 className={css.header}>Phonebook</h1>
-      <ContactForm handleSubmit={handleSubmit} />
+      <ContactForm />
       <h2 className={css.contacts}>Contacts</h2>
       <Filter filter={filter} handleChange={handleChange} />
       <ContactList

@@ -1,27 +1,44 @@
 import { useState } from 'react';
-import propTypes from 'prop-types';
 import css from './ContactForm.module.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectContacts } from '../../redux/selectors/selectors';
+import { addContact } from '../../redux/operations/operations';
 
-export const ContactForm = ({ handleSubmit }) => {
+export const ContactForm = () => {
   const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+  const [phone, setPhone] = useState('');
+  const dispatch = useDispatch();
+  const { contacts } = useSelector(selectContacts);
 
   const handleNameChange = e => {
     const { value } = e.target;
     setName(value);
-    // setName(e.target.value); // also good
   };
 
   const handleNumberChange = e => {
-    setNumber(e.target.value);
+    setPhone(e.target.value);
   };
 
   const handleFormSubmit = e => {
     e.preventDefault();
-    const form = e.currentTarget;
-    handleSubmit({ name: name, number: number });
+    const contactList = [...contacts];
+    if (
+      contactList.findIndex(
+        contact => name === contact.name
+      ) !== -1
+    ) {
+      alert(`${name} is already in contacts.`);
+    } else {
+      dispatch(
+        addContact({
+          name,
+          phone,
+        })
+      );
+    }
+
     setName('');
-    setNumber('');
+    setPhone('');
   };
 
   return (
@@ -47,7 +64,7 @@ export const ContactForm = ({ handleSubmit }) => {
         title='Phone number must be digits and can contain spaces, dashes, parentheses and can start with +'
         required
         placeholder='Enter phone number'
-        value={number}
+        value={phone}
         onChange={handleNumberChange}
       />
       <button className={css.formBtn} type='submit'>
@@ -55,8 +72,4 @@ export const ContactForm = ({ handleSubmit }) => {
       </button>
     </form>
   );
-};
-
-ContactForm.propTypes = {
-  handleSubmit: propTypes.func.isRequired,
 };

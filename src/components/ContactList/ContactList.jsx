@@ -6,18 +6,18 @@ export const ContactList = ({ contacts, handleDelete }) => (
     {' '}
     <ul className={css.contactList}>
       {' '}
-      {contacts.map((contact, id) => (
-        <li key={id} className={css.contactListItem}>
-          {contact.name}: {contact.number}
-          <button
-            type="button"
-            className={css.contactItemBtn}
-            onClick={() => handleDelete(contact.id)}
-          >
-            Delete
-          </button>
-        </li>
-      ))}
+      {contacts &&
+        contacts.map((contact, id) => (
+          <li key={id} className={css.contactListItem}>
+            {contact.name}: {contact.phone}
+            <button
+              type='button'
+              className={css.contactItemBtn}
+              onClick={() => handleDelete(contact.id)}>
+              Delete
+            </button>
+          </li>
+        ))}
     </ul>
   </div>
 );
@@ -27,7 +27,8 @@ ContactList.propTypes = {
     propTypes.exact({
       id: propTypes.string.isRequired,
       name: propTypes.string.isRequired,
-      number: propTypes.string.isRequired,
+      phone: propTypes.string.isRequired,
+      createdAt: propTypes.string,
     })
   ),
   handleDelete: propTypes.func.isRequired,

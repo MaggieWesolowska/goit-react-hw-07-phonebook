@@ -1,10 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { loadLocalStorage } from '../../utils/loadLocalStorage';
 
 const filterSlice = createSlice({
   name: 'filter',
   initialState: {
-    contacts: loadLocalStorage(),
+    contacts: [],
     filter: '',
   },
   reducers: {
@@ -17,6 +16,3 @@ const filterSlice = createSlice({
 
 export default filterSlice.reducer;
 export const { setFilter } = filterSlice.actions;
-
-// export const { setFilter } = filterSlice.actions;
-// export const filterReducer = filterSlice.reducer;
