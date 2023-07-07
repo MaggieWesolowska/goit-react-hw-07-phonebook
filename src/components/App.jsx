@@ -5,10 +5,8 @@ import { ContactList } from './ContactList/ContactList';
 import css from './ContactForm/ContactForm.module.css';
 import {
   fetchContacts,
-  addContact,
   deleteContact,
 } from '../redux/operations/operations';
-import { setFilter } from '../redux/slices/filterSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   selectContacts,
@@ -23,15 +21,6 @@ export const App = () => {
   useEffect(() => {
     dispatch(fetchContacts());
   }, []);
-
-  const handleChange = e => {
-    const { value } = e.target;
-    dispatch(
-      setFilter({
-        filter: value,
-      })
-    );
-  };
 
   const handleDelete = id => {
     dispatch(deleteContact(id));
@@ -65,7 +54,7 @@ export const App = () => {
       <h1 className={css.header}>Phonebook</h1>
       <ContactForm />
       <h2 className={css.contacts}>Contacts</h2>
-      <Filter filter={filter} handleChange={handleChange} />
+      <Filter filter={filter} />
       <ContactList
         contacts={getFilteredContacts()}
         handleDelete={handleDelete}
